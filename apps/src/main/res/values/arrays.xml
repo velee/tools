@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   
+    <string-array name="planets_groups">
+        <item>App</item>
+        <item>Action</item>
+    </string-array>
+    
+    <string-array name="planets_app_items">
+        <item>All</item>
+        <item>Enabled</item>
+        <item>Disabled</item>
+    </string-array>
+    
+    <string-array name="planets_action_items">
+        <item>Boot</item>
+        <item>Send</item>
+        <item>Widget</item>
+        <item>Launcher</item>
+        <item>Wallpaper</item>
+    </string-array>
+    
+    <string-array name="app_details_tabs">
+        <item>ACTIVITIES</item>
+        <item>SERVICES</item>
+        <item>RECEIVERS</item>
+        <item>PERMISSIONS</item>
+    </string-array>
+    
+    <string-array name="app_details_permission_groups">
+        <item>USES-FEATURES</item>
+        <item>PERMISSIONS</item>
+        <item>USES-PERMISSIONS</item>
+    </string-array>
+</resources>
