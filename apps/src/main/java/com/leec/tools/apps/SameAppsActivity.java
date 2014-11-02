@@ -32,7 +32,7 @@ public class SameAppsActivity extends ActionBarActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_app_permissions);
+		setContentView(R.layout.activity_same_apps);
 
         Intent intent = getIntent();
         mPermissionName = intent.getStringExtra(ARG_PERMISSION_NAME);

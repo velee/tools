@@ -270,7 +270,7 @@ public class AppsActivity extends ActionBarActivity {
         	
         	mIndex = getArguments().getInt(ARG_PLANET_NUMBER);	
         	
-            View rootView = inflater.inflate(R.layout.activity_app, container, false);
+            View rootView = inflater.inflate(R.layout.activity_apps, container, false);
             
             mSwipeRefreshLayout = (SwipeRefreshLayout) rootView;
             mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -364,7 +364,7 @@ public class AppsActivity extends ActionBarActivity {
     		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     		        // Inflate the menu for the CAB
     		        MenuInflater inflater = mode.getMenuInflater();
-    		        inflater.inflate(R.menu.app_action_bar, menu);
+    		        inflater.inflate(R.menu.apps_action_bar, menu);
     		        return true;
     		    }
 
@@ -487,7 +487,7 @@ public class AppsActivity extends ActionBarActivity {
         	
         	mIndex = getArguments().getInt(ARG_PLANET_NUMBER);	
         	
-            View rootView = inflater.inflate(R.layout.activity_app, container, false);
+            View rootView = inflater.inflate(R.layout.activity_apps, container, false);
             
             mSwipeRefreshLayout = (SwipeRefreshLayout) rootView;
             mSwipeRefreshLayout.setOnRefreshListener(this);

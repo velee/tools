@@ -401,7 +401,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_app_permissions, container, false);
+            View rootView = inflater.inflate(R.layout.activity_same_apps, container, false);
 
             Bundle args = getArguments();
 
