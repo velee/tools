@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.appwidget.AppWidgetManager;
@@ -19,6 +18,8 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,22 +32,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.*;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SimpleExpandableListAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.CheckListAdapter;
 
 
-public class AppsActivity extends Activity {
+public class AppsActivity extends ActionBarActivity {
 	
 	private static final String TAG = AppsActivity.class.getSimpleName();
 
@@ -84,11 +78,14 @@ public class AppsActivity extends Activity {
 			mLeftDrawer.expandGroup(i);
 		}
 
-
-        getActionBar().setDisplayShowHomeEnabled(false);
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        // Set up the action bar.
+        final android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(false);
+            // enable ActionBar app icon to behave as action to toggle nav drawer
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -100,12 +97,16 @@ public class AppsActivity extends Activity {
                 R.string.drawer_close  /* "close drawer" description for accessibility */
                 ) {
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
+                if (actionBar != null) {
+                    actionBar.setTitle(mTitle);
+                }
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
+                if (actionBar != null) {
+                    actionBar.setTitle(mDrawerTitle);
+                }
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -204,7 +205,9 @@ public class AppsActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getActionBar().setTitle(mTitle);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(mTitle);
+        }
     }
 
     /**
@@ -252,7 +255,8 @@ public class AppsActivity extends Activity {
         @Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         	super.onCreateOptionsMenu(menu, menuInflater);
-			SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            //SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
     		searchView.setOnQueryTextListener(this);
     		searchView.setQueryHint(getString(R.string.search_hint));
 		}
@@ -468,7 +472,8 @@ public class AppsActivity extends Activity {
         @Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         	super.onCreateOptionsMenu(menu, menuInflater);
-			SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            //SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
     		searchView.setOnQueryTextListener(this);
     		searchView.setQueryHint(getString(R.string.search_hint));
 		}

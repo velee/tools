@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
@@ -17,7 +16,7 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.SimpleExpandableAdapter;
 
-public class SameAppsActivity extends Activity {
+public class SameAppsActivity extends ActionBarActivity {
 	
 	private static final String TAG = SameAppsActivity.class.getSimpleName();
 	
@@ -34,14 +33,17 @@ public class SameAppsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_app_permissions);
-		
+
+        Intent intent = getIntent();
+        mPermissionName = intent.getStringExtra(ARG_PERMISSION_NAME);
+
 		// Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		Intent intent = getIntent();
-		mPermissionName = intent.getStringExtra(ARG_PERMISSION_NAME);
-		actionBar.setSubtitle(mPermissionName);
+        final android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setSubtitle(mPermissionName);
+        }
+
 		mPackageManager = getPackageManager();
 		mListView = (ExpandableListView) findViewById(R.id.app_permissions_expand_list_view);
 		loadListDatas();

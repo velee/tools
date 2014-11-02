@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -34,11 +32,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -59,7 +58,7 @@ import android.widget.Toast;
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.CheckListAdapter;
 
-public class DetailsActivity extends FragmentActivity implements ActionBar.TabListener {
+public class DetailsActivity extends ActionBarActivity implements ActionBar.TabListener {
 	
 	private static final String TAG = DetailsActivity.class.getSimpleName();
 	
@@ -83,49 +82,39 @@ public class DetailsActivity extends FragmentActivity implements ActionBar.TabLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_details_pager);
-        
+
         // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-        
+        final android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
+
         Intent intent = getIntent();
 		String packageName = intent.getStringExtra(ARG_PACKAGE_NAME);
 
 		PackageManager pm = getPackageManager();
-		actionBar.setSubtitle(packageName);
-		try {
-			PackageInfo p = pm.getPackageInfo(packageName, 0);
-			actionBar.setTitle(pm.getApplicationLabel(p.applicationInfo));
-			actionBar.setIcon(pm.getApplicationIcon(p.applicationInfo));
-		} catch (NameNotFoundException e) {
-		}
-		
-		actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if (actionBar != null) {
+            //show icon false
+            //actionBar.setDisplayShowHomeEnabled(false);
+            //back action
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+            actionBar.setSubtitle(packageName);
+            try {
+                PackageInfo p = pm.getPackageInfo(packageName, 0);
+                actionBar.setTitle(pm.getApplicationLabel(p.applicationInfo));
+                actionBar.setIcon(pm.getApplicationIcon(p.applicationInfo));
+            } catch (NameNotFoundException e) {
+            }
+        }
 
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
         mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager(), packageName, this);
-        
-        // Specify that the Home/Up button should not be enabled, since there is no hierarchical
-        // parent.
-        //actionBar.setHomeButtonEnabled(false);
-
-        // Specify that we will be displaying tabs in the action bar.
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
         mViewPager = (ViewPager) findViewById(R.id.app_details_pager);
         mViewPager.setAdapter(mAppSectionsPagerAdapter);
-//        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-//            @Override
-//            public void onPageSelected(int position) {
-//                // When swiping between different app sections, select the corresponding tab.
-//                // We can also use ActionBar.Tab#select() to do this if we have a reference to the
-//                // Tab.
-//                actionBar.setSelectedNavigationItem(position);
-//            }
-//        });
-        
+
         PagerTabStrip tabStrip = (PagerTabStrip)mViewPager.findViewById(R.id.pager_title);
         //tabStrip.setTabIndicatorColor();
         tabStrip.setTabIndicatorColorResource(R.color.tab_indicator_color);
@@ -144,10 +133,7 @@ public class DetailsActivity extends FragmentActivity implements ActionBar.TabLi
         
     }
 
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
+    /* -- replace with android.support.v7.app.ActionBar
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in the ViewPager.
@@ -155,7 +141,28 @@ public class DetailsActivity extends FragmentActivity implements ActionBar.TabLi
     }
 
     @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }*/
+
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
+        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
+
     }
     
     @Override
