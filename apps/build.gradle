@@ -33,6 +33,19 @@ android {
         }
     }
 
+    productFlavors {
+        /*
+        settings {
+            applicationId "com.mydevice.settings"
+            versionCode 1800
+            versionName "1.8.0"
+        }*/
+
+        tools {
+            applicationId "com.leec.tools.apps"
+        }
+    }
+
     buildTypes {
         release {
             runProguard false
