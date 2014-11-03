@@ -24,7 +24,6 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="action_search">Search</string>
-    <string name="action_undo">Reset</string>
     <string name="action_copy">Copy</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>

@@ -60,9 +60,6 @@ public class AppsActivity extends ActionBarActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mLeftDrawer = (ExpandableListView) findViewById(R.id.left_drawer);
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
         mLeftDrawer.setAdapter(new SimpleExpandableListAdapter(this, getGroupDatas(), R.layout.drawer_list_group, new String[] { "group_title" },  new int[] { R.id.group_title }, getGroupChildDatas(), R.layout.drawer_list_item, new String[] { "item_title" }, new int[] { R.id.item_title }));
         
         mLeftDrawer.setOnChildClickListener(new OnChildClickListener() {
@@ -400,7 +397,7 @@ public class AppsActivity extends ActionBarActivity {
 
 		protected void reloadListDatas() {
 			mSwipeRefreshLayout.setEnabled(false);
-			new AsyncTaskExtension().execute();
+			new AsyncTaskExtension().execute(mIndex, mPackageManager);
     	}
         
         protected void startAppDetails(String packageName) {
@@ -438,9 +435,9 @@ public class AppsActivity extends ActionBarActivity {
 		
 		private final class AsyncTaskExtension extends AsyncTask<Object, Object, List<Map<String, Object>>> {
 			@Override
-			protected List<Map<String, Object>> doInBackground(Object... arg0) {
+			protected List<Map<String, Object>> doInBackground(Object... args) {
 				Log.d(TAG, "Load packages info...");
-				return AppUtils.getPackageInfos((Boolean)AppUtils.decode(mIndex, 0, null, 1, true, 2, false), mPackageManager);
+				return AppUtils.getPackageInfos((Boolean)AppUtils.decode(args[0], 0, null, 1, true, 2, false), (PackageManager)args[1]);
 			}
 
 			@Override
@@ -449,8 +446,9 @@ public class AppsActivity extends ActionBarActivity {
 				datas.clear();
 	    		datas.addAll(result);
 	    		mAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setEnabled(true);
 				mSwipeRefreshLayout.setRefreshing(false);
-				mSwipeRefreshLayout.setEnabled(true);
+                Log.d(TAG, "Load packages info finished.");
 			}
 		}
     }
@@ -635,7 +633,7 @@ public class AppsActivity extends ActionBarActivity {
 		
 		private final class AsyncTaskExtension extends AsyncTask<Object, Object, List<Map<String, Object>>> {
 			@Override
-			protected List<Map<String, Object>> doInBackground(Object... arg0) {
+			protected List<Map<String, Object>> doInBackground(Object... args) {
 				Log.d(TAG, "Load components info...");
 				return AppUtils.queryActionActivities((String)AppUtils.decode(mIndex, 0, Intent.ACTION_BOOT_COMPLETED,
                         1, Intent.ACTION_SEND, 2, AppWidgetManager.ACTION_APPWIDGET_UPDATE,

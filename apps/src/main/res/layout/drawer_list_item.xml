@@ -19,8 +19,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingLeft="26dp"
-    android:paddingRight="16dp"
+    android:paddingStart="26dp"
+    android:paddingEnd="16dp"
     android:textSize="16sp"
     android:textColor="@color/text_color"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
