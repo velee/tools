@@ -10,7 +10,7 @@
         android:divider="@color/list_divider_color"   
 		android:dividerHeight="@dimen/list_divider_height"
 		android:scrollbarStyle="outsideOverlay"
-		android:background="@drawable/background"
+		android:background="@color/list_background"
 		android:paddingLeft="2dp"
     	android:paddingRight="2dp" />
 

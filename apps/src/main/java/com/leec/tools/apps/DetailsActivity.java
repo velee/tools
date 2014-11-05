@@ -38,20 +38,14 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.Toast;
 
@@ -324,7 +318,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
     		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     		        // Inflate the menu for the CAB
     		        MenuInflater inflater = mode.getMenuInflater();
-    		        inflater.inflate(R.menu.app_details_action_bar, menu);
+    		        inflater.inflate(R.menu.app_details_action_menu, menu);
     		        return true;
     		    }
 
@@ -355,7 +349,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
         @Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         	super.onCreateOptionsMenu(menu, menuInflater);
-        	menuInflater.inflate(R.menu.main, menu);
+        	menuInflater.inflate(R.menu.action_search, menu);
 			SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
     		searchView.setOnQueryTextListener(this);
     		searchView.setQueryHint(getString(R.string.search_hint));

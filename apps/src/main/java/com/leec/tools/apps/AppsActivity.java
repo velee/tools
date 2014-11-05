@@ -23,14 +23,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -117,7 +112,7 @@ public class AppsActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.action_search, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -146,7 +141,7 @@ public class AppsActivity extends ActionBarActivity {
     	ExpandableListAdapter adapter = parent.getExpandableListAdapter();
     	
     	if (groupPosition < 2) {
-    		// update the main content by replacing fragments
+    		// update the action_search content by replacing fragments
     		Fragment fragment;
     		if (groupPosition == 0) {
     			fragment = new PackageFragment();
@@ -253,6 +248,7 @@ public class AppsActivity extends ActionBarActivity {
         	super.onCreateOptionsMenu(menu, menuInflater);
             //SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
             SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+
     		searchView.setOnQueryTextListener(this);
     		searchView.setQueryHint(getString(R.string.search_hint));
 		}
@@ -360,7 +356,7 @@ public class AppsActivity extends ActionBarActivity {
     		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     		        // Inflate the menu for the CAB
     		        MenuInflater inflater = mode.getMenuInflater();
-    		        inflater.inflate(R.menu.apps_action_bar, menu);
+    		        inflater.inflate(R.menu.apps_action_menu, menu);
     		        return true;
     		    }
 
@@ -572,7 +568,7 @@ public class AppsActivity extends ActionBarActivity {
     		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     		        // Inflate the menu for the CAB
     		        MenuInflater inflater = mode.getMenuInflater();
-    		        inflater.inflate(R.menu.app_details_action_bar, menu);
+    		        inflater.inflate(R.menu.app_details_action_menu, menu);
     		        return true;
     		    }
 

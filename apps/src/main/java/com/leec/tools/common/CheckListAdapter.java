@@ -54,7 +54,7 @@ public class CheckListAdapter extends SimpleAdapter {
 		else if (getQueryState(position) == 1)
 			background = R.drawable.queryed_state_drawable;
 		else
-			background = R.drawable.background;
+			background = R.drawable.queryed_state_none;
 
 		view.setBackground(mContext.getResources().getDrawable(background));
 		

@@ -1,11 +1,13 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="colorPrimaryDark">@color/theme_primary</item>
         <item name="colorAccent">@color/theme_accent</item>
         <item name="android:windowBackground">@color/theme_window_background</item>
         <item name="android:textColorPrimary">@color/theme_text_primary</item>
+
+        <item name="actionModeBackground">@color/theme_action_mode_background</item>
     </style>
 
 </resources>
