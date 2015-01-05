@@ -47,8 +47,7 @@ public class CheckListAdapter extends SimpleAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = super.getView(position, convertView, parent);
-		int background = 0;
-
+		int background;
 		if (checkState[position] == 1)
 			background = R.drawable.selected_state_drawable;
 		else if (getQueryState(position) == 1)

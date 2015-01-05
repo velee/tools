@@ -30,6 +30,6 @@
     <string name="action_about">About</string>
     <string name="action_save">Save</string>
     <string name="activity_details">Details</string>
-    <string name="activity_same_apps">Same With</string>
+    <string name="activity_same_apps">Permission</string>
 
 </resources>

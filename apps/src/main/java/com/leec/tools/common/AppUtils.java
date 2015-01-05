@@ -32,7 +32,7 @@ public class AppUtils {
 		List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_SIGNATURES | PackageManager.GET_DISABLED_COMPONENTS
 				| PackageManager.GET_UNINSTALLED_PACKAGES);
 
-		String status = null;
+		String status;
 		for (PackageInfo p : packages) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("application_icon", pm.getApplicationIcon(p.applicationInfo));
@@ -49,7 +49,7 @@ public class AppUtils {
 				datas.add(map);
 			}
 		}
-		Collections.sort(datas, new MapComparator<Map<String, Object>>(new String[]{"package_name"}));
+		Collections.sort(datas, new MapComparator<Object>(new String[]{"package_name"}));
 		
 		return datas;
 	}
@@ -84,7 +84,7 @@ public class AppUtils {
 		} catch (NameNotFoundException e) {
 			Log.e(TAG, "getPackageDetails Unkonw package: " + packageName);
 		}
-		Collections.sort(datas, new MapComparator<Map<String, Object>>(new String[]{"component_name"}));
+		Collections.sort(datas, new MapComparator<Object>(new String[]{"component_name"}));
 		
 		return datas;
 	}
@@ -108,7 +108,7 @@ public class AppUtils {
 					map.put("permission_name", rp);
 					rPermissions.add(map);
 				}
-				Collections.sort(rPermissions, new MapComparator<Map<String, Object>>(new String[]{"permission_name"}));
+				Collections.sort(rPermissions, new MapComparator<Object>(new String[]{"permission_name"}));
 			}
 			
 			if (p.permissions != null) {
@@ -117,7 +117,7 @@ public class AppUtils {
 					map.put("permission_name", permission.name);
 					cPermissions.add(map);
 				}
-				Collections.sort(cPermissions, new MapComparator<Map<String, Object>>(new String[]{"permission_name"}));
+				Collections.sort(cPermissions, new MapComparator<Object>(new String[]{"permission_name"}));
 			}
 			
 			if (p.reqFeatures != null) {
@@ -126,7 +126,7 @@ public class AppUtils {
 					map.put("permission_name", reqFeature.name);
 					rFeatures.add(map);
 				}
-				Collections.sort(rFeatures, new MapComparator<Map<String, Object>>(new String[]{"permission_name"}));
+				Collections.sort(rFeatures, new MapComparator<Object>(new String[]{"permission_name"}));
 			}
 			
 		} catch (NameNotFoundException e) {
@@ -152,7 +152,7 @@ public class AppUtils {
 		} catch (NameNotFoundException e) {
 			Log.e(TAG, "getPermissions Unkonw package: " + packageName);
 		}
-		Collections.sort(permissions, new MapComparator<Map<String, Object>>(new String[]{"permission_name"}));
+		Collections.sort(permissions, new MapComparator<Object>(new String[]{"permission_name"}));
 		return permissions;
 	}
 	
@@ -207,7 +207,7 @@ public class AppUtils {
 			map.put("enable_state", getComponentEnabledState(component, pm));
 			datas.add(map);
 		}
-		Collections.sort(datas, new MapComparator<Map<String, Object>>(new String[]{"package_name"}));
+		Collections.sort(datas, new MapComparator<Object>(new String[]{"package_name"}));
 		return datas;
 	}
 	
@@ -231,7 +231,7 @@ public class AppUtils {
 				}
 			}
 		}
-		Collections.sort(datas, new MapComparator<Map<String, Object>>(new String[]{"package_name"}));
+		Collections.sort(datas, new MapComparator<Object>(new String[]{"package_name"}));
 		
 		return datas;
 	}

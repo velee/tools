@@ -274,7 +274,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
     		    	
     		        switch (item.getItemId()) {
 	    		        case R.id.action_copy:
-	    		        	StringBuffer text = new StringBuffer(); 
+	    		        	StringBuilder text = new StringBuilder();
 			            	for (ComponentName component : components) {
 			            		text.append(component.getClassName()).append("\n");
 			            	}
@@ -395,7 +395,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_same_apps, container, false);
+            View rootView = inflater.inflate(R.layout.activity_app_permissions, container, false);
 
             Bundle args = getArguments();
 

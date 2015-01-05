@@ -3,31 +3,36 @@ package com.leec.tools.common;
 import java.util.Comparator;
 import java.util.Map;
 
-public class MapComparator<T extends Map<String, Object>> implements Comparator<T> {
-	private String[] groupKeys;
-	private boolean nullIsFirst = true;
+public class MapComparator<T> implements Comparator<Map<String, T>> {
+	private String[] orderKeys;
+	private boolean nullIsFirst;
 	
-	public MapComparator(String[] groupKeys) {
-		this.groupKeys = groupKeys;
+	public MapComparator(String[] orderKeys) {
+		this(orderKeys, false);
+	}
+
+	public MapComparator(String[] orderKeys, boolean nullIsFirst) {
+		this.orderKeys = orderKeys;
+		this.nullIsFirst = nullIsFirst;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public int compare(T map1, T map2) {
+	public int compare(Map<String, T> map1, Map<String, T> map2) {
 		
-		for (String groupKey : groupKeys) {
-			Object o1 = map1.get(groupKey);
-			Object o2 = map2.get(groupKey);
+		for (String orderKey : orderKeys) {
+			T o1 = map1.get(orderKey);
+			T o2 = map2.get(orderKey);
 			
 			if (o1 == null && o2 == null) {
-				
+				return 0;
 			} else if (o1 == null) {
-				return nullIsFirst ? 1 : -1;
-			} else if (o2 == null) {
 				return nullIsFirst ? -1 : 1;
+			} else if (o2 == null) {
+				return nullIsFirst ? 1 : -1;
 			}
 			
 			if(o1 instanceof Comparable) {
-				int c = ((Comparable) o1).compareTo((Comparable) o2);
+				int c = ((Comparable) o1).compareTo(o2);
 				if (c != 0) {
 					return c;
 				}
