@@ -129,10 +129,7 @@ public class AppsActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
          // The action bar home/up action should open or close the drawer.
          // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
 	@SuppressWarnings("unchecked")
@@ -180,9 +177,9 @@ public class AppsActivity extends ActionBarActivity {
     private List<List<Map<String, Object>>> getGroupChildDatas() {
     	List<List<Map<String, Object>>> childDatas = new ArrayList<List<Map<String, Object>>>();
     	int[] groupChildIds = new int[]{R.array.planets_app_items, R.array.planets_action_items};
-    	for (int i = 0; i < groupChildIds.length; i++) {
+    	for (int groupChildId : groupChildIds) {
     		List<Map<String, Object>> childData = new ArrayList<Map<String, Object>>();
-    		String[] items = getResources().getStringArray(groupChildIds[i]);
+    		String[] items = getResources().getStringArray(groupChildId);
         	for (String title : items) {
         		Map<String, Object> map = new HashMap<String, Object>();
     			map.put("item_title", title);
@@ -438,11 +435,11 @@ public class AppsActivity extends ActionBarActivity {
 			@Override
 			protected void onPostExecute(List<Map<String, Object>> result) {
 				super.onPostExecute(result);
-				datas.clear();
-	    		datas.addAll(result);
-	    		mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setEnabled(true);
 				mSwipeRefreshLayout.setRefreshing(false);
+				datas.clear();
+				datas.addAll(result);
+				mAdapter.notifyDataSetChanged();
                 Log.d(TAG, "Load packages info finished.");
 			}
 		}
@@ -638,11 +635,11 @@ public class AppsActivity extends ActionBarActivity {
 			@Override
 			protected void onPostExecute(List<Map<String, Object>> result) {
 				super.onPostExecute(result);
+				mSwipeRefreshLayout.setEnabled(true);
+				mSwipeRefreshLayout.setRefreshing(false);
 				datas.clear();
 	    		datas.addAll(result);
 				mAdapter.notifyDataSetChanged();
-				mSwipeRefreshLayout.setRefreshing(false);
-				mSwipeRefreshLayout.setEnabled(true);
 			}
 		}
 	}
