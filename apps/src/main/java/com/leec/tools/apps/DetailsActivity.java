@@ -16,20 +16,11 @@
 
 package com.leec.tools.apps;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -42,15 +33,12 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.*;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
+import android.widget.*;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ListView;
-import android.widget.SimpleExpandableListAdapter;
-import android.widget.Toast;
-
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.CheckListAdapter;
+
+import java.util.*;
 
 public class DetailsActivity extends ActionBarActivity implements ActionBar.TabListener {
 	
@@ -72,6 +60,8 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
      */
 	private ViewPager mViewPager;
 
+	private String mPackageName;
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +71,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
         final android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
 
         Intent intent = getIntent();
-		String packageName = intent.getStringExtra(ARG_PACKAGE_NAME);
+		this.mPackageName = intent.getStringExtra(ARG_PACKAGE_NAME);
 
 		PackageManager pm = getPackageManager();
 
@@ -91,9 +81,9 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             //back action
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-            actionBar.setSubtitle(packageName);
+            actionBar.setSubtitle(mPackageName);
             try {
-                PackageInfo p = pm.getPackageInfo(packageName, 0);
+                PackageInfo p = pm.getPackageInfo(mPackageName, 0);
                 actionBar.setTitle(pm.getApplicationLabel(p.applicationInfo));
                 actionBar.setIcon(pm.getApplicationIcon(p.applicationInfo));
             } catch (NameNotFoundException e) {
@@ -102,7 +92,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
 
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
-        mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager(), packageName, this);
+        mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager(), mPackageName, this);
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
@@ -162,14 +152,46 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			this.finish();
-		default:
-			return super.onOptionsItemSelected(item);
+			case android.R.id.home:
+				this.finish();
+				return true;
+			case R.id.action_app_info:
+				openAppInfo(mPackageName);
+				return true;
+			case R.id.action_google_play:
+				openInPlay(mPackageName);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
-    /**
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.app_details_action_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	protected void openAppInfo(String packageName) {
+		Intent intent = new Intent();
+		intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+		Uri uri = Uri.fromParts("package", packageName, null);
+		intent.setData(uri);
+		startActivity(intent);
+	}
+
+	protected void openInPlay(String packageName) {
+		try {
+			startActivity(new Intent(Intent.ACTION_VIEW,
+					Uri.parse("market://details?id=" + packageName)));
+		} catch (android.content.ActivityNotFoundException anfe) {
+			startActivity(new Intent(Intent.ACTION_VIEW,
+					Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+		}
+	}
+
+	/**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
      * sections of the app.
      */
@@ -318,7 +340,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
     		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     		        // Inflate the menu for the CAB
     		        MenuInflater inflater = mode.getMenuInflater();
-    		        inflater.inflate(R.menu.app_details_action_menu, menu);
+    		        inflater.inflate(R.menu.app_details_action_mode_menu, menu);
     		        return true;
     		    }
 

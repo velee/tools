@@ -16,16 +16,16 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_about"
-          android:icon="@drawable/ic_action_about"
-          android:title="@string/action_about"
-          app:showAsAction="ifRoom|withText"/>
+    <item android:id="@+id/action_copy"
+          android:icon="@drawable/ic_content_copy_white"
+          android:title="@string/action_copy"
+          app:showAsAction="ifRoom|withText" />
     <item android:id="@+id/action_enable"
-          android:icon="@drawable/ic_action_play"
+          android:icon="@drawable/ic_lock_open_white"
           android:title="@string/action_enable"
-          app:showAsAction="ifRoom|withText"/>
+          app:showAsAction="ifRoom|withText" />
     <item android:id="@+id/action_disable"
-          android:icon="@drawable/ic_action_stop"
+          android:icon="@drawable/ic_lock_white"
           android:title="@string/action_disable"
-          app:showAsAction="ifRoom|withText"/>
+          app:showAsAction="ifRoom|withText" />
 </menu>

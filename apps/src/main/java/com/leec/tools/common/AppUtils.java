@@ -1,10 +1,6 @@
 package com.leec.tools.common;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -25,9 +21,13 @@ public class AppUtils {
 	
 	public static final String COMPONENT_ENABLED_STATE_ENABLED = "1";
 	public static final String COMPONENT_ENABLED_STATE_DISABLED = "2";
-	
-	public static List<Map<String, Object>> getPackageInfos(Boolean state, PackageManager pm) {
 
+	public static final int FETCH_PACKAGE_ALL = 0;
+	public static final int FETCH_PACKAGE_ENABLED = 1;
+	public static final int FETCH_PACKAGE_DISABLED = 2;
+	public static final int FETCH_PACKAGE_FAVORITES = 3;
+	
+	public static List<Map<String, Object>> getPackageInfos(int flags, PackageManager pm, Set<String> favorites) {
 		List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
 		List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_SIGNATURES | PackageManager.GET_DISABLED_COMPONENTS
 				| PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -41,11 +41,13 @@ public class AppUtils {
 			status = getPackageEnabledState(p.applicationInfo.packageName, pm);
 			map.put("enable_state", status);
 
-			if (state == null)
+			if (FETCH_PACKAGE_ALL == flags)
 				datas.add(map);
-			else if (state && COMPONENT_ENABLED_STATE_ENABLED.equals(status)) {
+			else if (FETCH_PACKAGE_ENABLED == flags && COMPONENT_ENABLED_STATE_ENABLED.equals(status)) {
 				datas.add(map);
-			} else if (!state && COMPONENT_ENABLED_STATE_DISABLED.equals(status)) {
+			} else if (FETCH_PACKAGE_DISABLED == flags && COMPONENT_ENABLED_STATE_DISABLED.equals(status)) {
+				datas.add(map);
+			} else if (FETCH_PACKAGE_FAVORITES == flags && favorites.contains(p.applicationInfo.packageName)) {
 				datas.add(map);
 			}
 		}

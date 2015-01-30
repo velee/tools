@@ -1,37 +1,28 @@
 package com.leec.tools.apps;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.appwidget.AppWidgetManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.*;
-import android.widget.*;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.*;
 import android.widget.ExpandableListView.OnChildClickListener;
-
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.CheckListAdapter;
+
+import java.util.*;
 
 
 public class AppsActivity extends ActionBarActivity {
@@ -288,7 +279,7 @@ public class AppsActivity extends ActionBarActivity {
 					startPackageDetail(packageName);
 				}
 			});
-    		
+
     		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 			mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
@@ -306,7 +297,7 @@ public class AppsActivity extends ActionBarActivity {
 					mode.setTitle(String.valueOf(count));
 					
 					//设置只有单选的时候显示
-					mode.getMenu().findItem(R.id.action_about).setVisible(count == 1);
+					//mode.getMenu().findItem(R.id.action_about).setVisible(count == 1);
 				}
 
     		    @Override
@@ -339,11 +330,24 @@ public class AppsActivity extends ActionBarActivity {
     		                mode.finish(); // Action picked, so close the CAB
     		                reloadListDatas();
     		                return true;
-    		            case R.id.action_about:
-    		            	startAppDetails(packages.get(0));
-    		            	mAdapter.uncheckAll();
-    		                mode.finish(); // Action picked, so close the CAB
-    		            	return true;
+						case R.id.action_favorites:
+							SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
+							Set<String> favorites = sharedPreferences.getStringSet("favorites", null);
+							if (favorites == null) {
+								favorites = new HashSet<String>();
+							}
+							if (mIndex == AppUtils.FETCH_PACKAGE_FAVORITES) {
+								favorites.removeAll(packages);
+							} else {
+								favorites.addAll(packages);
+							}
+							sharedPreferences.edit().putStringSet("favorites", favorites).apply();
+							mAdapter.uncheckAll();
+							mode.finish(); // Action picked, so close the CAB
+							if (mIndex == AppUtils.FETCH_PACKAGE_FAVORITES) {
+								reloadListDatas();
+							}
+							return true;
     		            default:
     		                return false;
     		        }
@@ -353,7 +357,9 @@ public class AppsActivity extends ActionBarActivity {
     		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     		        // Inflate the menu for the CAB
     		        MenuInflater inflater = mode.getMenuInflater();
-    		        inflater.inflate(R.menu.apps_action_menu, menu);
+    		        inflater.inflate(R.menu.apps_action_mode_menu, menu);
+					//favorites buttion
+					menu.findItem(R.id.action_favorites).setIcon(mIndex == AppUtils.FETCH_PACKAGE_FAVORITES ? R.drawable.ic_turned_in_white : R.drawable.ic_turned_in_not_white);
     		        return true;
     		    }
 
@@ -389,17 +395,16 @@ public class AppsActivity extends ActionBarActivity {
 
 		protected void reloadListDatas() {
 			mSwipeRefreshLayout.setEnabled(false);
-			new AsyncTaskExtension().execute(mIndex, mPackageManager);
+			Set<String> favorites;
+			if (mIndex == AppUtils.FETCH_PACKAGE_FAVORITES) {
+				SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
+				favorites = sharedPreferences.getStringSet("favorites", Collections.<String>emptySet());
+			} else {
+				favorites = Collections.emptySet();
+			}
+			new AsyncTaskExtension().execute(mIndex, mPackageManager, favorites);
     	}
-        
-        protected void startAppDetails(String packageName) {
-    		Intent intent = new Intent();
-    		intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-    		Uri uri = Uri.fromParts("package", packageName, null);
-    		intent.setData(uri);
-    		startActivity(intent);
-    	}
-        
+
         protected void startPackageDetail(String packageName) {
         	Intent intent = new Intent(getActivity(), DetailsActivity.class);
         	intent.putExtra(DetailsActivity.ARG_PACKAGE_NAME, packageName);
@@ -429,7 +434,7 @@ public class AppsActivity extends ActionBarActivity {
 			@Override
 			protected List<Map<String, Object>> doInBackground(Object... args) {
 				Log.d(TAG, "Load packages info...");
-				return AppUtils.getPackageInfos((Boolean)AppUtils.decode(args[0], 0, null, 1, true, 2, false), (PackageManager)args[1]);
+				return AppUtils.getPackageInfos((Integer)args[0], (PackageManager)args[1], (Set<String>)args[2]);
 			}
 
 			@Override
@@ -565,7 +570,7 @@ public class AppsActivity extends ActionBarActivity {
     		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     		        // Inflate the menu for the CAB
     		        MenuInflater inflater = mode.getMenuInflater();
-    		        inflater.inflate(R.menu.app_details_action_menu, menu);
+    		        inflater.inflate(R.menu.app_details_action_mode_menu, menu);
     		        return true;
     		    }
 

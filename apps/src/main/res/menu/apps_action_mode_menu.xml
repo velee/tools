@@ -16,12 +16,16 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_google_play"
-          android:icon="@drawable/ic_shop_white"
-          android:title="@string/action_google_play"
-          app:showAsAction="never|withText"/>
-    <item android:id="@+id/action_app_info"
-          android:icon="@drawable/ic_info_white"
-          android:title="@string/action_app_info"
-          app:showAsAction="never|withText"/>
+    <item android:id="@+id/action_favorites"
+          android:icon="@drawable/ic_turned_in_not_white"
+          android:title="@string/action_favorites"
+          app:showAsAction="ifRoom|withText"/>
+    <item android:id="@+id/action_enable"
+          android:icon="@drawable/ic_lock_open_white"
+          android:title="@string/action_enable"
+          app:showAsAction="ifRoom|withText"/>
+    <item android:id="@+id/action_disable"
+          android:icon="@drawable/ic_lock_white"
+          android:title="@string/action_disable"
+          app:showAsAction="ifRoom|withText"/>
 </menu>
