@@ -26,6 +26,10 @@ public class AppUtils {
 	public static final int FETCH_PACKAGE_ENABLED = 1;
 	public static final int FETCH_PACKAGE_DISABLED = 2;
 	public static final int FETCH_PACKAGE_FAVORITES = 3;
+
+	public static final String PREFS_FILE_SETTINGS = "settings";
+	public static final String PREFS_SETTINGS_KEY_FAVORITES = "favorites";
+	public static final String PREFS_SETTINGS_KEY_LAST_UPDATE = "last_update";
 	
 	public static List<Map<String, Object>> getPackageInfos(int flags, PackageManager pm, Set<String> favorites) {
 		List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();

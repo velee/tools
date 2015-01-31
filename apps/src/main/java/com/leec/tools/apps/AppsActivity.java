@@ -331,8 +331,8 @@ public class AppsActivity extends ActionBarActivity {
     		                reloadListDatas();
     		                return true;
 						case R.id.action_favorites:
-							SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
-							Set<String> favorites = sharedPreferences.getStringSet("favorites", null);
+							SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppUtils.PREFS_FILE_SETTINGS, MODE_PRIVATE);
+							Set<String> favorites = sharedPreferences.getStringSet(AppUtils.PREFS_SETTINGS_KEY_FAVORITES, null);
 							if (favorites == null) {
 								favorites = new HashSet<String>();
 							}
@@ -341,7 +341,10 @@ public class AppsActivity extends ActionBarActivity {
 							} else {
 								favorites.addAll(packages);
 							}
-							sharedPreferences.edit().putStringSet("favorites", favorites).apply();
+							sharedPreferences.edit()
+									.putStringSet(AppUtils.PREFS_SETTINGS_KEY_FAVORITES, favorites)
+									.putLong(AppUtils.PREFS_SETTINGS_KEY_LAST_UPDATE, System.currentTimeMillis())
+									.apply();
 							mAdapter.uncheckAll();
 							mode.finish(); // Action picked, so close the CAB
 							if (mIndex == AppUtils.FETCH_PACKAGE_FAVORITES) {
@@ -397,8 +400,8 @@ public class AppsActivity extends ActionBarActivity {
 			mSwipeRefreshLayout.setEnabled(false);
 			Set<String> favorites;
 			if (mIndex == AppUtils.FETCH_PACKAGE_FAVORITES) {
-				SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
-				favorites = sharedPreferences.getStringSet("favorites", Collections.<String>emptySet());
+				SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppUtils.PREFS_FILE_SETTINGS, MODE_PRIVATE);
+				favorites = sharedPreferences.getStringSet(AppUtils.PREFS_SETTINGS_KEY_FAVORITES, Collections.<String>emptySet());
 			} else {
 				favorites = Collections.emptySet();
 			}
