@@ -12,6 +12,10 @@
         <item>Disabled</item>
         <item>Favorites</item>
     </string-array>
+
+    <string-array name="planets_app_lables">
+        <item>Favorites</item>
+    </string-array>
     
     <string-array name="planets_action_items">
         <item>Boot</item>

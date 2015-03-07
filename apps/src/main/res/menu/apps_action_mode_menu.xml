@@ -19,7 +19,8 @@
     <item android:id="@+id/action_favorites"
           android:icon="@drawable/ic_turned_in_not_white"
           android:title="@string/action_favorites"
-          app:showAsAction="ifRoom|withText"/>
+          app:showAsAction="ifRoom|withText">
+    </item>
     <item android:id="@+id/action_enable"
           android:icon="@drawable/ic_lock_open_white"
           android:title="@string/action_enable"

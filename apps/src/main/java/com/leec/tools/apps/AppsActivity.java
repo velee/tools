@@ -1,7 +1,6 @@
 package com.leec.tools.apps;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.*;
 import android.appwidget.AppWidgetManager;
 import android.content.*;
 import android.content.pm.PackageManager;
@@ -22,6 +21,8 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.CheckListAdapter;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 
@@ -233,7 +234,11 @@ public class AppsActivity extends ActionBarActivity {
         
         @Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        	super.onCreateOptionsMenu(menu, menuInflater);
+            if (mIndex > 2) {
+                menuInflater.inflate(R.menu.apps_action_menu, menu);
+            }
+
+            super.onCreateOptionsMenu(menu, menuInflater);
             //SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
             SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 
@@ -330,7 +335,10 @@ public class AppsActivity extends ActionBarActivity {
     		                mode.finish(); // Action picked, so close the CAB
     		                reloadListDatas();
     		                return true;
-						case R.id.action_favorites:
+                        case R.id.action_favorites:
+                            choiceLablesDialog(mode).show();
+                            return true;
+/*						case R.id.action_favorites:
 							SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppUtils.PREFS_FILE_SETTINGS, MODE_PRIVATE);
 							Set<String> favorites = sharedPreferences.getStringSet(AppUtils.PREFS_SETTINGS_KEY_FAVORITES, null);
 							if (favorites == null) {
@@ -350,7 +358,7 @@ public class AppsActivity extends ActionBarActivity {
 							if (mIndex == AppUtils.FETCH_PACKAGE_FAVORITES) {
 								reloadListDatas();
 							}
-							return true;
+							return true;*/
     		            default:
     		                return false;
     		        }
@@ -396,6 +404,71 @@ public class AppsActivity extends ActionBarActivity {
         	reloadListDatas();
         }
 
+        protected Dialog choiceLablesDialog(final ActionMode mode) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMultiChoiceItems(new String[]{"1", "2", "3"}, new boolean[]{false, false, false}, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                    Toast.makeText(getActivity(), "dialog " + i + " " + b, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            builder.setNeutralButton("Create lable", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    createLableDialog(mode).show();
+                }
+            });
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mode.finish();
+                }
+            });
+
+            //setNeutralButton
+            //builder.setNegativeButton()
+
+            //builder.setTitle("Choice Lables");
+
+            Dialog dialog = builder.create();
+
+            Window dialogWindow = dialog.getWindow();
+            dialogWindow.setGravity(Gravity.TOP);
+
+            return dialog;
+        }
+
+        protected Dialog createLableDialog(final ActionMode mode) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setView(new EditText(getActivity()));
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    choiceLablesDialog(mode).show();
+                }
+            });
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppUtils.PREFS_FILE_SETTINGS, MODE_PRIVATE);
+                    Set<String> lables = sharedPreferences.getStringSet(AppUtils.PREFS_SETTINGS_KEY_LABLES, null);
+                    if (lables == null) {
+                        lables = new HashSet<String>();
+                    }
+
+
+                    choiceLablesDialog(mode).show();
+                }
+            });
+
+            return builder.create();
+        }
+
 		protected void reloadListDatas() {
 			mSwipeRefreshLayout.setEnabled(false);
 			Set<String> favorites;
@@ -414,7 +487,22 @@ public class AppsActivity extends ActionBarActivity {
         	startActivity(intent);
     	}
 
-		@Override
+        protected void killBackgroundProcesses(String packageName) {
+            ActivityManager am = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            am.killBackgroundProcesses(packageName);
+        }
+
+        protected void forceStopPackage(String packageName) {
+            ActivityManager am = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            try {
+                Method method = ActivityManager.class.getMethod("forceStopPackage", String.class);
+                method.invoke(am, packageName);
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
 		public boolean onQueryTextChange(String newText) {
 			//possible onCreateOptionsMenu called before onCreate
 			if (mAdapter != null) 
