@@ -29,6 +29,7 @@ public class AppUtils {
 
 	public static final String PREFS_FILE_SETTINGS = "settings";
 	public static final String PREFS_SETTINGS_KEY_FAVORITES = "favorites";
+    public static final String PREFS_SETTINGS_KEY_LABLES = "lables";
 	public static final String PREFS_SETTINGS_KEY_LAST_UPDATE = "last_update";
 	
 	public static List<Map<String, Object>> getPackageInfos(int flags, PackageManager pm, Set<String> favorites) {

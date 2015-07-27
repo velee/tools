@@ -1,5 +1,6 @@
 package com.leec.tools.apps;
 
+import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.appwidget.AppWidgetManager;
@@ -11,8 +12,8 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.*;
@@ -22,10 +23,11 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.CheckListAdapter;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 
-public class AppsActivity extends ActionBarActivity {
+public class AppsActivity extends AppCompatActivity {
 	
 	private static final String TAG = AppsActivity.class.getSimpleName();
 
@@ -323,6 +325,9 @@ public class AppsActivity extends ActionBarActivity {
 								@Override
 								public void process(Context context) {
 									AppUtils.setApplicationEnabledState(packages, PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER, mPackageManager);
+									for (String packageName : packages) {
+                                        killBackgroundProcesses(packageName);
+                                    }
 									Toast.makeText(context, packages.size() + " packages disabled success", Toast.LENGTH_LONG).show();
 								}
 							});
@@ -413,6 +418,22 @@ public class AppsActivity extends ActionBarActivity {
         	intent.putExtra(DetailsActivity.ARG_PACKAGE_NAME, packageName);
         	startActivity(intent);
     	}
+
+		protected void killBackgroundProcesses(String packageName) {
+			ActivityManager am = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+			am.killBackgroundProcesses(packageName);
+		}
+
+
+		protected void forceStopPackage(String packageName) {
+			ActivityManager am = (ActivityManager)getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+			try {
+				Method method = ActivityManager.class.getMethod("forceStopPackage", String.class);
+				method.invoke(am, packageName);
+			} catch (Exception e) {
+				Toast.makeText(getActivity(), "error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		}
 
 		@Override
 		public boolean onQueryTextChange(String newText) {

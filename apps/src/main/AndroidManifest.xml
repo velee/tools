@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"
                      tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
 
     <application
         android:allowBackup="true"

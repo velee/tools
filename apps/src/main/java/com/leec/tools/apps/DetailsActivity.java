@@ -28,7 +28,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.*;
@@ -40,7 +40,7 @@ import com.leec.tools.common.CheckListAdapter;
 
 import java.util.*;
 
-public class DetailsActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class DetailsActivity extends AppCompatActivity implements ActionBar.TabListener {
 	
 	private static final String TAG = DetailsActivity.class.getSimpleName();
 	

@@ -1,22 +1,21 @@
 package com.leec.tools.apps;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupExpandListener;
-
 import com.leec.tools.common.AppUtils;
 import com.leec.tools.common.SimpleExpandableAdapter;
 
-public class SameAppsActivity extends ActionBarActivity {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class SameAppsActivity extends AppCompatActivity {
 	
 	private static final String TAG = SameAppsActivity.class.getSimpleName();
 	
